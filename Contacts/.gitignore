@@ -1,0 +1,96 @@
+/bin/
+/obj/
+
+# macOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Visual Studio and Visual Studio Code
+.vscode/
+.vscode-test/
+.vs/
+*.suo
+*.user
+*.rsuser
+*.sln.docstates
+
+# Visual Studio build files
+*.obj
+*.pch
+*.pdb
+*.ipch
+*.tlog
+*.log
+*.ilk
+*.meta
+*.tmp
+*.tmp_proj
+*.pidb
+*.svclog
+*.sbr
+*.rsp
+.builds
+*.tlb
+*.tli
+*.tlh
+
+# Visual Studio project and solution files
+*.njsproj
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vssscc
+*.vspscc
+
+# ASP.NET and .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+ScaffoldingReadMe.txt
+
+# Dependencies
+node_modules/
+jspm_packages/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# npm
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+
+# Environment files
+.env
+
+# Temporary and cache files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# StyleCop
+StyleCopReport.xml
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# Optional editor directories
+.idea/
+*.sw?
