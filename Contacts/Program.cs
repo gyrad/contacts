@@ -35,10 +35,10 @@ do
             AddContact(contacts);
             break;
         case 4:
-            Console.WriteLine("TODO: Edit a contact");
+            EditContact(contacts);
             break;
         case 5:
-            Console.WriteLine("TODO: Delete a contact");
+            DeleteContact(contacts);
             break;
         case 9:
             break;
@@ -218,4 +218,146 @@ void AddContact(List<Contact> contacts)
 
     contacts.Add(new Contact(name, phone, email));
     Console.WriteLine("\nContact added successfully.\n");
+}
+
+void EditContact(List<Contact> contacts)
+{
+    Console.WriteLine("\nEdit a contact\n");
+
+    Console.Write("Enter the name of the contact to edit: ");
+    string name = Console.ReadLine() ?? string.Empty;
+
+    Contact? contact = contacts.FirstOrDefault(
+        c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+    );
+    if (contact is null)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine("Contact not found");
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        return;
+    }
+
+    Console.WriteLine("Enter the new information\n");
+
+    bool hasValidationError = false;
+    string newName;
+    do
+    {
+        newName = ReadLine.Read("Name: ", contact.Name);
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            hasValidationError = true;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("Name is invalid");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+        }
+        else
+        {
+            hasValidationError = false;
+            contact.Name = newName;
+        }
+    } while (hasValidationError);
+
+    string newEmail;
+    do
+    {
+        newEmail = ReadLine.Read("Email: ", contact.Email);
+        if (!string.IsNullOrWhiteSpace(newEmail))
+        {
+            if (!Regex.IsMatch(newEmail, @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"))
+            {
+                hasValidationError = true;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Invalid email address.");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                newEmail = string.Empty;
+            }
+            else if (contacts.Any(c => c.Email == newEmail))
+            {
+                hasValidationError = true;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Email address already exists.");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                newEmail = string.Empty;
+            }
+            else
+            {
+                hasValidationError = false;
+                contact.Email = newEmail;
+            }
+        }
+        else
+        {
+            hasValidationError = false;
+            contact.Email = newEmail;
+        }
+    } while (hasValidationError);
+
+    string newPhone;
+    do
+    {
+        newPhone = ReadLine.Read("Phone: ", contact.Phone);
+        if (!string.IsNullOrWhiteSpace(newPhone))
+        {
+            if (Regex.IsMatch(newPhone, @"^\d{10}$"))
+            {
+                hasValidationError = false;
+                newPhone = $"{newPhone[..3]}-{newPhone[3..6]}-{newPhone[6..]}";
+                contact.Phone = newPhone;
+            }
+            else if (!Regex.IsMatch(newPhone, @"^\d{3}-\d{3}-\d{4}$"))
+            {
+                hasValidationError = true;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Phone is invalid. Use the format: 123-456-7890");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+            }
+            else if (contacts.Any(c => c.Phone == newPhone))
+            {
+                hasValidationError = true;
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Phone number already exists.");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                newPhone = string.Empty;
+            }
+            else
+            {
+                hasValidationError = false;
+                contact.Phone = newPhone;
+            }
+        }
+        else
+        {
+            hasValidationError = false;
+            contact.Phone = newPhone;
+        }
+    } while (hasValidationError);
+}
+
+void DeleteContact(List<Contact> contacts)
+{
+    Console.WriteLine("\nDelete a contact\n");
+
+    Console.Write("Enter the name of the contact to delete: ");
+    string name = Console.ReadLine() ?? string.Empty;
+
+    Contact? contact = contacts.FirstOrDefault(
+        c => c.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+    );
+    if (contact is null)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine("Contact not found");
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        return;
+    }
+
+    contacts.Remove(contact);
+    Console.ForegroundColor = ConsoleColor.DarkRed;
+    Console.WriteLine("Contact deleted");
+    Console.ForegroundColor = ConsoleColor.DarkGreen;
+
+    Console.WriteLine("\nUpdated contacts list\n");
+    ListContacts(contacts);
 }
