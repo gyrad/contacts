@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Text;
+using System.Text.RegularExpressions;
 using Contacts;
 
 Console.Clear();
@@ -40,6 +41,9 @@ do
         case 5:
             DeleteContact(contacts);
             break;
+        case 6:
+            ListContacts(contacts, true);
+            break;
         case 9:
             break;
         default:
@@ -66,16 +70,30 @@ void DisplayMainMenu()
     Console.WriteLine("3. Add a contact");
     Console.WriteLine("4. Edit a contact");
     Console.WriteLine("5. Delete a contact");
+    Console.WriteLine("6. Export contacts to file");
     Console.WriteLine("9. Exit");
 }
 
-void ListContacts(List<Contact> contacts)
+void ListContacts(List<Contact> contacts, bool saveToFile = false)
 {
-    Console.WriteLine("{0,-26}{1,-26}{2,-26}", "Name", "Phone", "Email");
-    Console.WriteLine(new string('-', 78));
+    var stringBuilder = new StringBuilder();
+    string header = string.Format("{0,-26}{1,-26}{2,-26}", "Name", "Phone", "Email");
+    string separator = new string('-', 78);
+    stringBuilder.AppendLine(header);
+    stringBuilder.AppendLine(separator);
+
     foreach (var contact in contacts)
     {
-        Console.WriteLine(contact);
+        stringBuilder.AppendLine(contact.ToString());
+    }
+
+    Console.WriteLine(stringBuilder.ToString());
+
+    if (saveToFile)
+    {
+        string fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "contacts.txt");
+        File.WriteAllText(fileName, stringBuilder.ToString());
+        Console.WriteLine($"Contacts saved to {fileName}");
     }
 }
 
@@ -378,7 +396,7 @@ void DeleteContact(List<Contact> contacts)
 
     contacts.Remove(contact);
     Console.ForegroundColor = ConsoleColor.DarkRed;
-    Console.WriteLine("Contact deleted");
+    Console.WriteLine($"{contact.Name} has been deleted from your contacts");
     Console.ForegroundColor = ConsoleColor.DarkGreen;
 
     Console.WriteLine("\nUpdated contacts list\n");
